@@ -19,7 +19,11 @@ class Login(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         res = LoginSerializer(data=data)
-        if res.is_valid():
-            return HttpResponse(res.validated_data)
-        return HttpResponse(res.errors)
+        
+        if res.is_valid(raise_exception=True):
+            return HttpResponse("登录成功")                           
+        else:
+            return HttpResponse(res.errors)
+            
+            
             
