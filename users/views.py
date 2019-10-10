@@ -1,8 +1,10 @@
 from django.contrib.auth.models  import User, Group
 from rest_framework.views import APIView
+import json
+from django.contrib.auth.hashers import check_password
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework.generics import ListAPIView, ListCreateAPIView,CreateAPIView
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 
 # 注册
@@ -13,17 +15,22 @@ class Register(CreateAPIView):
     
 # 登录
 class Login(APIView):
+    authentication_classes = []
     queryset = User.objects.all()
     serializer_class = LoginSerializer
     
     def post(self, request, *args, **kwargs):
         data = request.data
-        res = LoginSerializer(data=data)
-        
-        if res.is_valid(raise_exception=True):
-            return HttpResponse("登录成功")                           
+        user = User.objects.filter(username= data['username']).first()
+        res = {"success":False, "msg":""}
+        if not user:
+            res['msg']="用户名不存在"
         else:
-            return HttpResponse(res.errors)
-            
+            if check_password(data["password"], user.password):
+                res['success'] = True
+                res['msg']="登陆成功"
+            else:
+                res['msg']="密码错误"
+        return HttpResponse(content=json.dumps(res))
             
             

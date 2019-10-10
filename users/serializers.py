@@ -15,12 +15,3 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
-    def vadildate(self, data):
-        user_obj = User.objects.filter(username = data['username']).first()
-        if not user_obj:
-            raise serializers.ValidationError("用户名不存在")
-        else:
-            if user_obj.check_password(data['password']):
-                return data
-            else:
-                raise serializers.ValidationError("用户名或密码错误")
