@@ -128,6 +128,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALI_OSS_BASE_URL = "127.0.0.1:8000"
 
+Auth_USER_MODEL = "user.User"
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

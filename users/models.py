@@ -1,9 +1,8 @@
 from django.db import models
 import uuid
 from django.contrib.auth import get_user_model
-from django.contrib.postgres import fields as pg_fields
-from django.db import transaction
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 UserModel = get_user_model()
@@ -45,27 +44,15 @@ class WeChatAccount(models.Model):
         return self.nickname or self.unionid or self.openid
 
 
-class UserAccount(models.Model):
-    """ 账户信息"""
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    create_time = models.DateTimeField(verbose_name="创建时间", auto_now_add=True)
+class User(AbstractUser):
+    phone = models.CharField(verbose_name="手机号码", max_length=15, unique=True)
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True)
-    user = models.OneToOneField(
-        UserModel,
-        unique=True,
-        on_delete=models.PROTECT,
-        verbose_name="对应验证账号",
-        related_name="account",
-    )
     role = models.CharField(
         verbose_name="用户角色",
         max_length=16,
         default="normal",
         blank=True,
     )
-    # 网站用户信息
-    phone = models.CharField(verbose_name="手机号", max_length=11, unique=True)
-    email = models.EmailField(verbose_name="邮箱地址", blank=True)
     nickname = models.CharField(
         verbose_name="昵称", max_length=32, blank=True, default=""
     )
@@ -79,14 +66,13 @@ class UserAccount(models.Model):
         null=True,
     )
     avatar_url = models.CharField(verbose_name="头像URL", max_length=255, blank=True)
-    # 账户注册来源
     registration_source = models.IntegerField(
         verbose_name="注册来源",
         default=0,
     )
-
     class Meta:
-        verbose_name = verbose_name_plural = "账户信息"
+        db_table = "singer.users"
+        verbose_name = verbose_name_plural = "用户"
 
     def __str__(self):
         return self.phone
@@ -96,4 +82,8 @@ class UserAccount(models.Model):
         if self.avatar_url:
             return f"{settings.ALI_OSS_BASE_URL}{self.avatar_url}"
         return ""
+
+    
+
+    
 

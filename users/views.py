@@ -5,6 +5,9 @@ from django.contrib.auth.hashers import check_password
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework.generics import ListAPIView, ListCreateAPIView,CreateAPIView
 from django.http import HttpResponse, JsonResponse
+from django.db.models.signals import post_save
+
+
 
 
 # 注册
@@ -12,7 +15,6 @@ class Register(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-    
 # 登录
 class Login(APIView):
     authentication_classes = []
