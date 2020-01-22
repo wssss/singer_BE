@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+
+    'corsheaders',
     'song',
     'users',
 ]
@@ -45,6 +47,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -106,9 +112,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -121,6 +127,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
 
 MEDIA_URL = '/media/'
 
@@ -128,10 +137,65 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 ALI_OSS_BASE_URL = "127.0.0.1:8000"
 
-Auth_USER_MODEL = "user.User"
 
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
+}
+AUTH_USER_MODEL = "users.User"
+
+
+# 跨域白名单
+CORS_ORIGIN_WHITELIST = (
+    '*'
+)
+
+# ALLOWED_HOSTS = [
+#     'http://localhost:8080/',
+#     'http://127.0.0.1:8000/'
+# ]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+
+LOGGING = {
+    'version':1,
+    'disable_existing_loggers':False,
+    'formatters':{
+        'verbose':{
+            'format': '%{levelname}s %{asctime}s %{module}s %{lineno}d %{message}s'
+        },
+        'simple':{
+            'format': '%{levelname}s %{module}s %{lineno}d %{message}s'
+        }
+    },
+    'filters':{
+        'require_debug_true':{
+            '()':'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'handlers':{
+        'console':{
+            'level':'DEBUG',
+            'filters':['require_debug_true'],
+            'class':'logging.StreamHandler',
+            'formatter':'simple'
+        },
+        'file':{
+            'level':'INFO',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename':os.path.join(BASE_DIR, "logs/singer.log"),
+            'maxBytes':300 * 1024 * 1024,
+            'backupCount':10,
+            'formatter':'verbose'
+        }
+    },
+    'loggers':{
+        'singer':{
+            'handlers':['console', 'file'],
+            'propagate':True
+        }
+    }
 }
