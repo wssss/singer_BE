@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import sys
+import sys, datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -140,10 +140,6 @@ ALI_OSS_BASE_URL = "127.0.0.1:8000"
 
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
-}
 AUTH_USER_MODEL = "users.User"
 
 
@@ -160,6 +156,19 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 
+
+REST_FRAMEWORK = {
+ 'DEFAULT_AUTHENTICATION_CLASSES': (
+ 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+ 'rest_framework.authentication.SessionAuthentication',
+ 'rest_framework.authentication.BasicAuthentication',
+ ),
+}
+
+JWT_AUTH = {
+ # 指明token的有效期
+ 'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+}
 
 LOGGING = {
     'version':1,

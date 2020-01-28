@@ -8,7 +8,7 @@ class Banner(models.Model):
     轮播图
     """
 
-    image = models.ImageField(upload_to="banner", verbose_name="轮播图", null=True, blank=True)
+    image = models.ImageField(upload_to="banner", verbose_name="轮播图", null=True, blank=True,help_text="图片大小16:9")
     name = models.CharField(max_length=150, verbose_name="轮播图名称")
     note = models.CharField(max_length=150, verbose_name="备注信息")
     link = models.CharField(max_length=150, verbose_name="轮播图广告地址")
