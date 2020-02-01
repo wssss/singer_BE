@@ -8,5 +8,5 @@ from . import views
 
 urlpatterns = [
     path("login/", obtain_jwt_token),
-    path("register/", RegisterView.as_view())
+    path("register/", RegisterView.as_view()),
 ]

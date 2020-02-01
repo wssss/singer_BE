@@ -14,7 +14,7 @@ class SongGroup(models.Model):
         return self.name
 
 
-# Create your models here.
+#点歌歌曲
 class Song(models.Model):
     name = models.CharField(verbose_name="歌曲名称", max_length=50)
     create_time = models.DateTimeField(verbose_name="创建时间", auto_now=True)

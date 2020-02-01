@@ -36,7 +36,7 @@ class User(AbstractUser):
         verbose_name = verbose_name_plural = "用户"
 
     def __str__(self):
-        return self.phone
+        return self.username
 
     @property
     def get_avatar_url_display(self):

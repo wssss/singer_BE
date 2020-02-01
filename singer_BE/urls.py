@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     re_path(r'media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
-    path("home/", include("home.urls"))
+    path("home/", include("home.urls")),
+    path("song/", include("song.urls"))
 ]
