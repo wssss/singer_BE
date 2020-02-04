@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import SongGroup, Song
 from django.shortcuts import get_object_or_404 
 
+
 class SongGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = SongGroup
@@ -33,14 +34,12 @@ class SongGroupSerializer(serializers.ModelSerializer):
 
 
 class SongSerializer(serializers.ModelSerializer):
-    group_id = serializers.IntegerField(required=False,label="组id",write_only=True)
-    # group = SongGroupSerializer()
+    group_id = serializers.IntegerField(required=False, label="分组id", write_only=True,allow_null=True)
     class Meta:
         model = Song
-        fields = ["name", "singer", "group_id", "group"]
+        fields = ["id", "name", "singer", "group_id", "group"]
         depth = 1
         extra_kwargs = {
-            
             "singer":{
                 "allow_null":True
             },
@@ -66,7 +65,6 @@ class SongSerializer(serializers.ModelSerializer):
             group=SongGroup.objects.get(pk=group_id)
         except SongGroup.DoesNotExist:
             group=None
-        print(group)
         song = Song.objects.create(
             name=name,
             singer=singer,
@@ -74,3 +72,17 @@ class SongSerializer(serializers.ModelSerializer):
             group=group
         )
         return song
+
+
+class SongDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Song
+        fields = ["name", "group_id", "singer"]
+
+
+class OrderSongSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Song
+        fields = ["id", "name", "singer",  "group"]
+        depth=1
+

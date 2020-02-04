@@ -21,7 +21,7 @@ class Song(models.Model):
     update_time = models.DateTimeField(verbose_name="更新时间", auto_now=True)
     singer = models.CharField(_("原唱歌手"), max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(SongGroup, verbose_name=_("分组名称"), on_delete=models.CASCADE, blank=True, null=True)
+    group = models.ForeignKey(SongGroup, verbose_name=_("分组名称"), on_delete=models.CASCADE, blank=True, null=True, related_name="songs")
     is_pub = models.BooleanField(verbose_name="是否发布", default=True)
 
     class Meta:
