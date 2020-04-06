@@ -31,10 +31,10 @@ class Song(models.Model):
     def __str__(self):
         return self.name
     
-#点歌列表
+#演唱列表
 class SongList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    song = models.ForeignKey(Song, on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.ForeignKey(User,on_delete=models.CASCADE, verbose_name="用户")
+    song = models.CharField(verbose_name="歌名", max_length=50, blank=True)
     create_time = models.DateTimeField(verbose_name="点歌时间", auto_now=True)
     sang_time = models.DateTimeField(verbose_name="唱歌时间", auto_now=True)
     sponsor = models.CharField(verbose_name="打赏人",max_length=50)

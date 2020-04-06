@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import SongGroup, Song
+from .models import SongGroup, Song, SongList
 from django.shortcuts import get_object_or_404 
+from users.models import User
 
 
 class SongGroupSerializer(serializers.ModelSerializer):
@@ -86,3 +87,24 @@ class OrderSongSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "singer",  "group"]
         depth=1
 
+
+
+class SongListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=SongList
+        fields=[ "song", "create_time", "sang_time", "sponsor", "money", "is_sang"]
+
+    def create(self, validated_data):
+        try:
+            
+            user=User.objects.get(pk=self.context['view'].kwargs.get('pk'))
+        except User.DoesNotExist:
+            raise serializers.ValidationError("请输入歌手id")
+
+        song = SongList.objects.create(
+                user=user,
+                song=validated_data.get("song"),
+                sponsor=validated_data.get("sponsor"),
+                money=validated_data.get("money")
+            )
+        return song

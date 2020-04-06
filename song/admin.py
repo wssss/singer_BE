@@ -9,3 +9,9 @@ class SongAdmin(admin.ModelAdmin):
 
 admin.site.register(Song, SongAdmin)
 
+
+class SongListAdmin(admin.ModelAdmin):
+    list_display=["user", "song", "create_time", "sang_time", "sponsor", "money", "is_sang"]
+
+
+admin.site.register(SongList,SongListAdmin )
