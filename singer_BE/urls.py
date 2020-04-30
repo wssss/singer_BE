@@ -18,11 +18,13 @@ from django.urls import path, re_path
 from django.conf.urls import url, include
 from django.conf import settings
 from django.views.static import serve
+from django.views.generic.base  import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     re_path(r'media/(?P<path>.*)', serve, {"document_root": settings.MEDIA_ROOT}),
     path("home/", include("home.urls")),
-    path("song/", include("song.urls"))
+    path("song/", include("song.urls")),
+    url(r'^$', TemplateView.as_view(template_name="index.html")),
 ]
