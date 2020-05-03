@@ -3,7 +3,7 @@ from rest_framework.views import  APIView
 from .models import SongGroup, Song,SongList
 from .serializers import SongGroupSerializer,SongSerializer, SongDetailSerializer, OrderSongSerializer,SongListSerializer
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.response import Response
 
 class GroupAPIView(ListCreateAPIView):
@@ -64,16 +64,18 @@ class groupDeleteView(APIView):
 
 class OrderListView(ListAPIView):
     serializer_class =  OrderSongSerializer 
-
+    
     def get_queryset(self):
-        print(self.request)
         return Song.objects.filter(user_id=self.kwargs['pk'])
 
 
 class SongToSingCreateView(ListCreateAPIView):
     serializer_class = SongListSerializer
+    permission_classes=(AllowAny,)
 
     def get_queryset(self):
-        return SongList.objects.filter(user_id=self.kwargs['pk'])
+        return SongList.objects.filter(user_id=self.kwargs.get('pk'))
+
+
 
     
